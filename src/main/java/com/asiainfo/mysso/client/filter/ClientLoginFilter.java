@@ -1,4 +1,4 @@
-package com.asiainfo.mysso.client;
+package com.asiainfo.mysso.client.filter;
 
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;

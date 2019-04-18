@@ -6,25 +6,21 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
- * TODO
  * 
- * @author       zq
- * @date         2017年11月12日  下午4:35:06
- * Copyright: 	  北京亚信智慧数据科技有限公司
+ * @Description: TODO
+ * @author chenzq  
+ * @date 2019年2月4日 下午12:07:47
+ * @version V1.0
  */
 @SpringBootApplication
 @ComponentScan("com.asiainfo.mysso.client.filter")
 @ServletComponentScan
-public class ClientApplication {
+public class ClientApplicationSso {
 
-    /** 
-     * TODO
-     * 
-     * @param args
-     */
     public static void main(String[] args) {
+
         SpringApplication app = new SpringApplication(new Object[] {ClientApplication.class});
-        app.setAdditionalProfiles(new String[] {"client"});
+        app.setAdditionalProfiles(new String[] {"clientsso"});
         app.run(args);
     }
 }

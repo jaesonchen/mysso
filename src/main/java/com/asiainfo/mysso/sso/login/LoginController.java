@@ -47,7 +47,7 @@ public class LoginController {
      * @return
      */
     @RequestMapping("/sso/login")
-    String ssoLogin(LoginUser user, Map<String, Object> model, HttpServletResponse response) {
+    public String ssoLogin(LoginUser user, Map<String, Object> model, HttpServletResponse response) {
         
         logger.info("sso login action, user={}", user);
         //do login
@@ -99,7 +99,7 @@ public class LoginController {
      * @return
      */
     @RequestMapping("/login")
-    String login(@RequestParam(name="callback", required=false) String callback, Map<String, Object> model, 
+    public String login(@RequestParam(name="callback", required=false) String callback, Map<String, Object> model, 
             HttpServletRequest request, HttpServletResponse response) {
         
         logger.info("client login, callback={}", callback);
@@ -153,7 +153,7 @@ public class LoginController {
      * @return
      */
     @RequestMapping("/logout/{userName}")
-    String logout(@PathVariable(name="userName") String userName, Map<String, Object> model, 
+    public String logout(@PathVariable(name="userName") String userName, Map<String, Object> model, 
             HttpServletRequest request, HttpServletResponse response) {
         
         logger.info("sso logout, userName={}", userName);
@@ -179,7 +179,7 @@ public class LoginController {
      */
     @ResponseBody
     @RequestMapping(value = "/ticket/{ticket}")
-    String ticket(@PathVariable("ticket") String ticket) {
+    public String ticket(@PathVariable("ticket") String ticket) {
         
         if (loginCache.containsKey(ticket)) {
             return loginCache.get(ticket);
@@ -196,7 +196,7 @@ public class LoginController {
     protected void addLoginHosts(String userName, String callback) {
         
         logger.info("addLoginHosts: userName={}, callback={}", userName, callback);
-        String pattern = "^((http://)|(https://))?([0-9]{1,3}\\.){3}[0-9]{1,3}.[0-9]{2,5}(/)";
+        String pattern = "^((http://)|(https://))?((localhost)|([0-9]{1,3}\\.){3}[0-9]{1,3}).[0-9]{2,5}(/)";
         Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(callback);
         if (m.find()) {
@@ -209,6 +209,18 @@ public class LoginController {
                 logger.info("add host: {}", host);
                 hosts.add(host);
             }
+        }
+    }
+    
+    public static void main(String[] args) {
+
+        Logger logger = LoggerFactory.getLogger(LoginController.class);
+        String pattern = "^((http://)|(https://))?((localhost)|([0-9]{1,3}\\.){3}[0-9]{1,3}).[0-9]{2,5}(/)";
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher("http://localhost:8090/client/welcome.jsp");
+        if (m.find()) {
+            String host = m.group();
+            logger.info("add host: {}", host);
         }
     }
 }

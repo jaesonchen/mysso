@@ -48,13 +48,13 @@ public abstract class AbstractSsoFilter implements Filter {
         String skipUrl = config.getInitParameter("skip-url");
         if (!StringUtils.isEmpty(skipUrl)) {
             for (String url : skipUrl.split(",")) {
-                skipUrls.add(url);
+                skipUrls.add(url.trim());
             }
         }
         String skipSuffix = config.getInitParameter("skip-suffix");
         if (!StringUtils.isEmpty(skipSuffix)) {
             for (String suffix : skipSuffix.split(",")) {
-                skipSuffixs.add(suffix);
+                skipSuffixs.add(suffix.trim());
             }
         }
         String ssoLoginServer = config.getInitParameter("sso-login-server");
@@ -98,7 +98,7 @@ public abstract class AbstractSsoFilter implements Filter {
             logger.info("ticket from sso server: ticket={}", ticket);
             String userId = template.getForObject(this.ssoTicketUrl + "/{ticket}", String.class, ticket);
             Assert.notNull(userId, "userId is null!");
-            logger.info("sso login userId={}", userId);
+            logger.info("local system login userId={}", userId);
             this.doLogin(userId, req, res);
             chain.doFilter(request, response);
             return;
