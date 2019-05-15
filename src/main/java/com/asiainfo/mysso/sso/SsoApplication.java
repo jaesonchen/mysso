@@ -12,17 +12,12 @@ import org.springframework.context.annotation.ComponentScan;
  * Copyright: 	  北京亚信智慧数据科技有限公司
  */
 @SpringBootApplication
-@ComponentScan("com.asiainfo.mysso.sso")
+@ComponentScan("com.asiainfo.mysso.sso.login")
 public class SsoApplication {
 
-    /** 
-     * TODO
-     * 
-     * @param args
-     */
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(new Object[] {SsoApplication.class});
-        app.setAdditionalProfiles(new String[] {"server"});
+        SpringApplication app = new SpringApplication(new Object[] { SsoApplication.class });
+        app.setAdditionalProfiles(new String[] { "server" });
         app.run(args);
     }
 }

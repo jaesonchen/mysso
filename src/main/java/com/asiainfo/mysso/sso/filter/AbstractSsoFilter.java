@@ -35,13 +35,7 @@ public abstract class AbstractSsoFilter implements Filter {
     private String ssoLoginUrl = "";
     private String ssoTicketUrl = "";
     private RestTemplate template = new RestTemplate();
-    
-    /* 
-     * TODO
-     * @param filterConfig
-     * @throws ServletException
-     * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
-     */
+
     @Override
     public void init(FilterConfig config) throws ServletException {
         
@@ -64,15 +58,6 @@ public abstract class AbstractSsoFilter implements Filter {
         this.ssoTicketUrl = ssoLoginServer + "ticket";
     }
 
-    /* 
-     * TODO
-     * @param request
-     * @param response
-     * @param chain
-     * @throws IOException
-     * @throws ServletException
-     * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
-     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -81,7 +66,7 @@ public abstract class AbstractSsoFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         //是否忽略请求
         if (this.isSkipRequest(req)) {
-            logger.info("url is skipped!");
+            logger.info("{} is skipped!", req.getRequestURI());
             chain.doFilter(request, response);
             return;
         }
@@ -111,18 +96,27 @@ public abstract class AbstractSsoFilter implements Filter {
         res.sendRedirect(loginUrl.toString());
     }
     
-    protected abstract boolean isLogin(HttpServletRequest request);
-
-    protected abstract void doLogin(String userId, HttpServletRequest request, HttpServletResponse response);
-
-    /* 
-     * TODO
-     * @see javax.servlet.Filter#destroy()
-     */
     @Override
     public void destroy() {
 
     }
+    
+    /**
+     * request请求对应的session是否已在本地系统登陆（通常是指在本地容器session中是否存在某个属性）
+     *
+     * @param request
+     * @return
+     */
+    protected abstract boolean isLogin(HttpServletRequest request);
+
+    /**
+     * 使用sso返回的userId在本地系统中进行登陆动作，以便下次访问时判断是否已本地登陆（通常是在本地容器session中设置某个属性，保存userId或者相关的权限对象）
+     *
+     * @param userId
+     * @param request
+     * @param response
+     */
+    protected abstract void doLogin(String userId, HttpServletRequest request, HttpServletResponse response);
     
     /**
      * 是否忽略请求
